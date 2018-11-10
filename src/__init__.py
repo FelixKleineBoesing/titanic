@@ -5,6 +5,10 @@ from src.modelling.CalculateThreshold import calculate_class
 
 import pandas as pd
 
+# TODO implement catboost & lightgbm models
+# TODO implement outlier cleaning
+# TODO think about furrther feature preparation
+
 
 class TitanicChallenge:
     def __init__(self):
@@ -54,4 +58,4 @@ if __name__=="__main__":
     titanic.train_models()
     titanic.predict_models()
     titanic.evaluate_models()
-    print(titanic.evaluation)
+    print(titanic.evaluation["xgb"]["Accuracy"])
