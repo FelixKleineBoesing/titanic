@@ -34,7 +34,7 @@ class TitanicChallenge:
         train_label = pd.read_csv("../computed_data/train_label.csv")
 
         # train and predict with xgboost
-        xgb_model = XGBoostModel(xgb_params={"eta": 0.1}, n_rounds=40)
+        xgb_model = XGBoostModel(xgb_params={"eta": 0.1, "objective": "binary:logistic"}, n_rounds=20)
         xgb_model.train_model(train_data, train_label)
         self.models["xgb"] = xgb_model
 

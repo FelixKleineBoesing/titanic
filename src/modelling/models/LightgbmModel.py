@@ -1,9 +1,9 @@
 from src.modelling.models.Model import Model
-import xgboost as xgb
+import lightgbm as lgbm
 import pandas as pd
 
 
-class XGBoostModel(Model):
+class LightgbmModel(Model):
 
     def __init__(self, xgb_params: {}, n_rounds: int):
         self.params = xgb_params
@@ -13,6 +13,7 @@ class XGBoostModel(Model):
     def train_model(self, train_data: pd.DataFrame, train_label: pd.DataFrame):
         train_data = self._preprocess(train_data)
         train_label = train_label.Survived.tolist()
+        print(1)
         dtrain = xgb.DMatrix(train_data, train_label)
 
         self.model = xgb.train(self.params, dtrain, num_boost_round=self.n_rounds)
