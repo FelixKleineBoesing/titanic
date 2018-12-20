@@ -5,13 +5,14 @@ import pandas as pd
 
 class CatboostModel(Model):
 
-    def __init__(self, cat_params: {}):
+    def __init__(self, cat_params: {}, n_rounds: int):
         self.params = cat_params
         self.model = None
+        self.n_rounds = n_rounds
 
     def train_model(self, train_data: pd.DataFrame, train_label: pd.DataFrame):
 
-        model = cat.CatBoostClassifier(**self.params)
+        self.model = cat.CatBoostClassifier(**self.params, num_boost_round=self.n_rounds)
         train_data = self._preprocess(train_data)
         train_label = train_label.Survived.tolist()
         pool = cat.Pool(train_data, train_label)
@@ -27,9 +28,7 @@ class CatboostModel(Model):
 
     @staticmethod
     def _preprocess(data: pd.DataFrame):
-        # one hot encode
-        data = pd.get_dummies(data)
-
+        # pass dat
         return data
 
     @staticmethod
