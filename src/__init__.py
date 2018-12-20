@@ -1,5 +1,7 @@
 from src.etl.ETL import ETL
 from src.modelling.models.XGBoostModel import XGBoostModel
+from src.modelling.models.LightgbmModel import LightgbmModel
+from src.modelling.models.CatboostModel import CatboostModel
 from src.modelling.Evaluator import Evaluator
 from src.modelling.CalculateThreshold import calculate_class
 
@@ -33,10 +35,18 @@ class TitanicChallenge:
         train_data = pd.read_csv("../computed_data/train_data.csv")
         train_label = pd.read_csv("../computed_data/train_label.csv")
 
-        # train and predict with xgboost
+        # train with different models
         xgb_model = XGBoostModel(xgb_params={"eta": 0.1, "objective": "binary:logistic"}, n_rounds=20)
         xgb_model.train_model(train_data, train_label)
         self.models["xgb"] = xgb_model
+
+        cat_model = CatboostModel(cat_params={"eta": 0.1}, n_rounds=20)
+        cat_model.train_model(train_data, train_label)
+        self.models["cat"] = cat_model
+
+        lgb_model = LightgbmModel(lgbm_params={"eta": 0.1}, n_rounds=20)
+        lgb_model.train_model(train_data, train_label)
+        self.models["lgb"] = lgb_model
 
     def predict_models(self):
         validation_data = pd.read_csv("../computed_data/validation_data.csv")
