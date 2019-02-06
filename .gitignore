@@ -1,6 +1,9 @@
 .Rhistory
 titanic.Rproj
 .idea/
-computed_data/
-initial_data/
-.Rproj.user
+#computed_data/
+#initial_data/
+computed_data
+initial_data
+src/modelling/__pycache__
+__pycache__
