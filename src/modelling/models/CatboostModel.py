@@ -5,17 +5,17 @@ import pandas as pd
 
 class CatboostModel(Model):
 
-    def __init__(self, cat_params: {}, n_rounds: int):
+    def __init__(self, cat_params: {}):
         self.params = cat_params
         self.model = None
-        self.n_rounds = n_rounds
 
     def train_model(self, train_data: pd.DataFrame, train_label: pd.DataFrame):
 
-        self.model = cat.CatBoostClassifier(**self.params, num_boost_round=self.n_rounds)
+        self.model = cat.CatBoostClassifier(**self.params)
         train_data = self._preprocess(train_data)
         train_label = train_label.Survived.tolist()
-        pool = cat.Pool(train_data, train_label)
+        cat_features = self._get_categorical_columns(train_data)
+        pool = cat.Pool(train_data, train_label, cat_features=cat_features)
 
         self.model.fit(pool, verbose=False)
 
@@ -26,9 +26,11 @@ class CatboostModel(Model):
         y_pred = self.model.predict(dtest)
         return y_pred
 
-    @staticmethod
-    def _preprocess(data: pd.DataFrame):
-        # pass dat
+    def _preprocess(self, data: pd.DataFrame):
+        cat_cols = self._get_categorical_columns(data)
+        for col in cat_cols:
+            data.iloc[:,col] = data.iloc[:,col].astype(str).fillna("NaN")
+
         return data
 
     @staticmethod

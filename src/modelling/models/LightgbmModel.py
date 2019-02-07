@@ -7,13 +7,14 @@ class LightgbmModel(Model):
 
     def __init__(self, lgbm_params: {}, n_rounds: int):
         self.params = lgbm_params
+        self.params["objective"] = "regression"
         self.model = None
         self.n_rounds = n_rounds
 
     def train_model(self, train_data: pd.DataFrame, train_label: pd.DataFrame):
         train_data = self._preprocess(train_data)
         train_label = train_label.Survived.tolist()
-        dtrain = lgbm.Dataset(train_data, label=train_label, categorical_feature=self._get_categorical_columns(train_data))
+        dtrain = lgbm.Dataset(train_data, label=train_label)
 
         self.model = lgbm.train(self.params, dtrain, num_boost_round=self.n_rounds)
 

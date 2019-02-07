@@ -1,5 +1,7 @@
 from src.etl.ETL import ETL
 from src.modelling.models.XGBoostModel import XGBoostModel
+from src.modelling.models.LightgbmModel import LightgbmModel
+from src.modelling.models.CatboostModel import CatboostModel
 from src.modelling.Evaluator import Evaluator
 from src.modelling.CalculateThreshold import calculate_class
 
@@ -38,10 +40,19 @@ class TitanicChallenge:
         xgb_model.train_model(train_data, train_label)
         self.models["xgb"] = xgb_model
 
+        catboost_model = CatboostModel(cat_params={"iterations":100, "learning_rate":0.3})
+        catboost_model.train_model(train_data, train_label)
+        self.models["catboost"] = catboost_model
+
+        lgbm_model = LightgbmModel(lgbm_params={}, n_rounds=100)
+        lgbm_model.train_model(train_data, train_label)
+        self.models["lightgbm"] = lgbm_model
+
     def predict_models(self):
         validation_data = pd.read_csv("../computed_data/validation_data.csv")
-        y_pred = self.models["xgb"].predict(validation_data)
-        self.predictions["xgb"] = calculate_class(y_pred, "naive")
+        for model in self.models.keys():
+            y_pred = self.models[model].predict(validation_data)
+            self.predictions[model] = calculate_class(y_pred, "naive")
 
     def evaluate_models(self):
         assert len(self.predictions) > 0, "call train and predict first!"
