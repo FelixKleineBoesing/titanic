@@ -1,6 +1,13 @@
 # titanic
-Data Science Titanic Project
+Data Science Titanic OOP Python Project
 
-This is just a small example of how to build a object orientated pipeline in python. 
+### Set Up
 
-To execute the main function you must download the titanic dataset from kaggle and unzip it into initial_data.
+Switch to the cloned repository, download the data, install dependencies and run the project.
+
+```
+git clone https://github.com/FelixKleineBoesing/titanic.git
+```
+
+Download the data then from [Kaggle Titanic Data](https://www.kaggle.com/c/titanic/data) and put it into "initial_data". You are than able to to run the __init__.py which trains some models and returns the measures.
+
